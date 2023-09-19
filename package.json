@@ -1,5 +1,6 @@
 {
   "name": "deploy-node",
+  "type": "module",
   "version": "1.0.0",
   "description": "A node application deploy into ubuntu server",
   "main": "index.js",
