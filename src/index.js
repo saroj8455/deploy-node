@@ -1,0 +1,1 @@
+console.log("A app deploy into ubuntu server")
