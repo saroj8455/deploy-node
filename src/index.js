@@ -7,6 +7,7 @@ import * as dotenv from "dotenv"
 import Joi from "joi"
 import cors from "cors"
 import mongoose from "mongoose";
+import router from "../routes/user.js";
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ const remoteConnection = async () =>{
         return "Database connection Error: Something went wrong Please try after sometime."
     }
 }
+// call remote connection
 remoteConnection();
 app.get('/', async (req, res) => {
     const dbStatus = await remoteConnection();
@@ -37,6 +39,8 @@ app.get('/', async (req, res) => {
         dbStatus
     })
 })
+
+app.use("/",router)
 
 /**
  * @username,@password
