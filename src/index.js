@@ -2,18 +2,39 @@ import express from "express"
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"
 import httpStatus from "http-status"
+import * as dotenv from "dotenv"
 // validation of user input
 import Joi from "joi"
 import cors from "cors"
+import mongoose from "mongoose";
+
+dotenv.config();
+
 const app = express()
-const port = process.env.PORT || 3000
+const REMOTE_DB = process.env.REMOTE_DB
+const PORT = process.env.PORT || 3000
 
 app.use(cors())
 app.use(express.json())
-
-app.get('/', (req, res) => {
+/**
+ * Prepare a remote connection for mongo db
+ */
+const remoteConnection = async () =>{
+    try{
+        await mongoose.connect(REMOTE_DB)
+        console.log("Connect to remote db")
+        return "Connected to Remote Database."
+    }catch (e) {
+        console.log(e)
+        return "Database connection Error: Something went wrong Please try after sometime."
+    }
+}
+remoteConnection();
+app.get('/', async (req, res) => {
+    const dbStatus = await remoteConnection();
     res.json({
-        message:"OK , API check done"
+        message:"OK , API check done",
+        dbStatus
     })
 })
 
@@ -58,6 +79,6 @@ app.post("/auth",async (req,res)=>{
 })
 
 
-app.listen(port, () => {
-    console.log(`Example app listening on port http://localhost:${port}`)
+app.listen(PORT, () => {
+    console.log(`Example app listening on port http://localhost:${PORT}`)
 })
