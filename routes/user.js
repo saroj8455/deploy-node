@@ -1,6 +1,7 @@
 import express from "express";
 
 import {User} from "../model/index.js";
+import {authVerify} from "../utils/authVerify.js";
 
 const router = express.Router();
 /**
@@ -27,7 +28,7 @@ router.post("/users",async (req,res)=>{
 /**
  * Get all users list
  */
-router.get("/users",async (req,res)=>{
+router.get("/users",authVerify,async (req,res)=>{
     try {
         const users = await User.find({});
         res.status(200).send({
@@ -58,16 +59,24 @@ router.put("/users/:_id",async (req,res)=>{
 /**
  * Delete a user
  */
-router.delete("/users/:_id",async (req,res)=>{
+router.delete("/users/:_id",async (req,res,next)=>{
     // console.log("delete method call")
     const {_id} = req.params
     try {
-        const deleteUser = await User.findByIdAndDelete(_id)
+        const deleteUser = await User.findOneAndDelete(_id)
         res.status(200).send(deleteUser)
     }catch (error) {
-        console.log(error)
-        res.status(500).send(error)
+        // console.log(error)
+        // res.status(500).send(error)
+        next(error)
     }
 })
+
+export const userErrorHandeler = (error,req,res,next) =>{
+    res.status(500).send(error)
+    next();
+}
+
+router.use(userErrorHandeler)
 
 export default router;

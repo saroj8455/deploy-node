@@ -54,7 +54,7 @@ app.post("/auth",async (req,res)=>{
     })
     const salt = await bcrypt.genSalt(10);
     const hashPwd = await bcrypt.hash("ocemdev",salt)
-    console.log(hashPwd)
+    // console.log(hashPwd)
     const {username,password} = req.body;
     if (!username || !password) {
         res.status(400).send({
@@ -74,8 +74,10 @@ app.post("/auth",async (req,res)=>{
                 error
             });
         }
+        const token = jwt.sign({username},process.env.JWT_TOKEN,{expiresIn: '1h'})
+        res.header("Authorization",token)
         return res.status(200).json({
-            username,password:hashPwd,validPassword
+            username,token,validPassword
         })
     }catch (error) {
         return res.status(500).send("Something wrong please try after sometime")
