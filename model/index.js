@@ -22,7 +22,34 @@ const contactSchema = new mongoose.Schema({
     }
 })
 
+const studentSchema = new mongoose.Schema({
+    "name": {
+        "type": "string"
+    },
+    "mobile": {
+        "type": "string"
+    },
+    "course": {
+        "type": "string"
+    },
+    "address": {
+        "type": "string"
+    },
+    "create_at": {
+        "type": "string"
+    },
+    "verified_by": {
+        "type": "string"
+    },
+    "payment_status": {
+        "type": "string"
+    },
+    "payment_mode": {
+        "type": "string"
+    }});
+
+
 const User = mongoose.model("User",userSchema);
 const Contact = mongoose.model("Contact",contactSchema)
-
-export {User,Contact}
+const Student = mongoose.model("Student",studentSchema)
+export {User,Contact,Student}

@@ -10,6 +10,7 @@ import mongoose from "mongoose";
 import router from "../routes/user.js";
 import contactRouter from "../routes/contact.js"
 import {errorHandeler} from "../utils/errorHandeler.js";
+import studentRouter from "../routes/student.js";
 
 dotenv.config();
 
@@ -44,6 +45,7 @@ app.get('/', async (req, res) => {
 
 app.use("/",router);
 app.use("/",contactRouter);
+app.use("/",studentRouter);
 
 /**
  * @username,@password
