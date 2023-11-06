@@ -11,6 +11,18 @@ const userSchema = new mongoose.Schema({
     }
 })
 
-const User = mongoose.model("User",userSchema);
+const contactSchema = new mongoose.Schema({
+    first_name:String,
+    last_name:String,
+    email:String,
+    phone:String,
+    create_at:{
+        type:Date,
+        default: new Date(),
+    }
+})
 
-export {User}
+const User = mongoose.model("User",userSchema);
+const Contact = mongoose.model("Contact",contactSchema)
+
+export {User,Contact}

@@ -8,6 +8,8 @@ import Joi from "joi"
 import cors from "cors"
 import mongoose from "mongoose";
 import router from "../routes/user.js";
+import contactRouter from "../routes/contact.js"
+import {errorHandeler} from "../utils/errorHandeler.js";
 
 dotenv.config();
 
@@ -40,7 +42,8 @@ app.get('/', async (req, res) => {
     })
 })
 
-app.use("/",router)
+app.use("/",router);
+app.use("/",contactRouter);
 
 /**
  * @username,@password
@@ -84,6 +87,7 @@ app.post("/auth",async (req,res)=>{
     }
 })
 
+app.use(errorHandeler)
 
 app.listen(PORT, () => {
     console.log(`Example app listening on port http://localhost:${PORT}`)
