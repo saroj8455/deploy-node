@@ -10,9 +10,9 @@ import path from 'path';
 import * as uuid from 'uuid';
 import sharp from "sharp";
 
-// const UPLOAD_PATH = path.join(path.resolve(), '/uploads');
-//
-// // File Upload
+const UPLOAD_PATH = path.join(path.resolve(), '/uploads');
+
+// File Upload
 // const storage = multer.diskStorage({
 //     destination: './uploads',
 //     filename: (req, file, cb) => {
@@ -70,26 +70,9 @@ studentRouter.post(
                 fs.mkdirSync('./uploads');
             }
         });
-        // const { filename: image } = req.file;
-        // await sharp(req.file.path)
-        //
-        //     .resize(200, 200)
-        //
-        //     .jpeg({ quality: 90 })
-        //
-        //     .toFile(
-        //
-        //         path.resolve(req.file.destination,'resized',image)
-        //
-        //     )
-        //
-        // fs.unlinkSync(req.file.path)
-        // res.status(201).jsonp({ file: req.file?.filename });
-        const { buffer, image } = req.file;
-        console.log(buffer);
-        console.log(image);
-        // const link = `http://localhost:3000/${ref}`;
-        // return res.json({ link });
+
+        res.status(201).jsonp({ file: req.file?.filename });
+
     }
 );
 
