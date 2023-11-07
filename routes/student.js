@@ -77,25 +77,27 @@ studentRouter.post(
 );
 
 studentRouter.post("/student/uploadtest", upload.single("picture"), async (req, res,next) => {
-    fs.access("./uploads", (error) => {
-        if (error) {
-            fs.mkdirSync("./uploads");
-        }
-    });
-    const { buffer, originalname } = req.file;
-    const timestamp = new Date().toISOString();
-    const ref = `${timestamp}-${originalname}.webp`;
-    try {
-        await sharp(buffer)
-            .webp({ quality: 20 })
-            .toFile("./uploads/" + ref);
-        // http://localhost:3000/uploads/2023-11-07T09:42:42.331Z-10780582_19199540.jpg.webp
-        const link = `http://localhost:3000/uploads/${ref}`;
-        return res.json({ link });
 
-    }catch (error) {
-        next(error)
-    }
+    res.status(httpStatus.OK).jsonp({message:"Api called Todo"})
+    // fs.access("./uploads", (error) => {
+    //     if (error) {
+    //         fs.mkdirSync("./uploads");
+    //     }
+    // });
+    // const { buffer, originalname } = req.file;
+    // const timestamp = new Date().toISOString();
+    // const ref = `${timestamp}-${originalname}.webp`;
+    // try {
+    //     await sharp(buffer)
+    //         .webp({ quality: 20 })
+    //         .toFile("./uploads/" + ref);
+    //     // http://localhost:3000/uploads/2023-11-07T09:42:42.331Z-10780582_19199540.jpg.webp
+    //     const link = `http://localhost:3000/uploads/${ref}`;
+    //     return res.json({ link });
+    //
+    // }catch (error) {
+    //     next(error)
+    // }
 
 });
 
