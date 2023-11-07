@@ -4,6 +4,27 @@ import {Student} from "../model/index.js";
 import {errorHandeler} from "../utils/errorHandeler.js"
 import httpStatus from "http-status";
 const studentRouter = express.Router();
+import * as fs from 'fs';
+import multer from 'multer';
+import path from 'path';
+import * as uuid from 'uuid';
+import sharp from "sharp";
+
+// const UPLOAD_PATH = path.join(path.resolve(), '/uploads');
+//
+// // File Upload
+// const storage = multer.diskStorage({
+//     destination: './uploads',
+//     filename: (req, file, cb) => {
+//         cb(null, uuid.v4() + '_' + file.originalname);
+//     },
+// });
+//
+// const upload = multer({ storage: storage });
+
+// Testing
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 /**
  *
@@ -40,6 +61,54 @@ studentRouter.post("/student",async (req,res,next)=>{
     }
 
 })
+
+studentRouter.post(
+    '/student/upload', upload.single('image'),
+    async (req,res,next) => {
+        fs.access('./uploads', (error) => {
+            if (error) {
+                fs.mkdirSync('./uploads');
+            }
+        });
+        // const { filename: image } = req.file;
+        // await sharp(req.file.path)
+        //
+        //     .resize(200, 200)
+        //
+        //     .jpeg({ quality: 90 })
+        //
+        //     .toFile(
+        //
+        //         path.resolve(req.file.destination,'resized',image)
+        //
+        //     )
+        //
+        // fs.unlinkSync(req.file.path)
+        // res.status(201).jsonp({ file: req.file?.filename });
+        const { buffer, image } = req.file;
+        console.log(buffer);
+        console.log(image);
+        // const link = `http://localhost:3000/${ref}`;
+        // return res.json({ link });
+    }
+);
+
+studentRouter.post("/student/uploadtest", upload.single("picture"), async (req, res) => {
+    fs.access("./uploads", (error) => {
+        if (error) {
+            fs.mkdirSync("./uploads");
+        }
+    });
+    const { buffer, originalname } = req.file;
+    const timestamp = new Date().toISOString();
+    const ref = `${timestamp}-${originalname}.webp`;
+    await sharp(buffer)
+        .webp({ quality: 20 })
+        .toFile("./uploads/" + ref);
+    // http://localhost:3000/uploads/2023-11-07T09:42:42.331Z-10780582_19199540.jpg.webp
+    const link = `http://localhost:3000/uploads/${ref}`;
+    return res.json({ link });
+});
 
 /**
  * Get all contacts list

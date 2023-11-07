@@ -1,8 +1,9 @@
 import express from "express"
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken"
-import httpStatus from "http-status"
-import * as dotenv from "dotenv"
+import jwt from "jsonwebtoken";
+import httpStatus from "http-status";
+import * as dotenv from "dotenv";
+import helmet from "helmet";
 // validation of user input
 import Joi from "joi"
 import cors from "cors"
@@ -15,17 +16,22 @@ import studentRouter from "../routes/student.js";
 dotenv.config();
 
 const app = express()
-const REMOTE_DB = process.env.REMOTE_DB
-const PORT = process.env.PORT || 3000
-
-app.use(cors())
-app.use(express.json())
+const REMOTE_DB = process.env.REMOTE_DB;
+const PORT = process.env.PORT || 3000;
+const LOCAL_DB = process.env.LOCAL_DB;
+// Use Helmet!
+app.use(helmet());
+app.use(cors());
+app.use(express.json());
+app.use('/uploads', express.static('./uploads'));
 /**
  * Prepare a remote connection for mongo db
  */
 const remoteConnection = async () =>{
     try{
-        await mongoose.connect(REMOTE_DB)
+        // await mongoose.connect(REMOTE_DB)
+        await mongoose.connect(LOCAL_DB)
+
         console.log("Connect to remote db")
         return "Connected to Remote Database."
     }catch (e) {
